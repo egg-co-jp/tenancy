@@ -31,7 +31,9 @@ class PostgreSQLDatabaseManager implements TenantDatabaseManager
 
     public function createDatabase(TenantWithDatabase $tenant): bool
     {
-        return $this->database()->statement("CREATE DATABASE \"{$tenant->database()->getName()}\" WITH TEMPLATE=template0");
+        $collate = $this->database()->getConfig("EGG_collate");
+        $ctype = $this->database()->getConfig("EGG_ctype");
+        return $this->database()->statement("CREATE DATABASE \"{$tenant->database()->getName()}\" WITH TEMPLATE=template0 LC_COLLATE='{$collate}' LC_CTYPE='{$ctype}'");
     }
 
     public function deleteDatabase(TenantWithDatabase $tenant): bool
